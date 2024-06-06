@@ -101,7 +101,7 @@ int main(void)
     tmpl_ComplexDouble z, w;
 
     /*  Declare a variable for the output files.                              */
-    FILE **fp;
+    FILE *fp[2];
 
     /*  Silly check to make sure the user provided a valid range for x and y. */
     if (x_max <= x_min)
@@ -135,9 +135,6 @@ int main(void)
              "Aborting computation.\n");
         exit(0);
     }
-
-    /*  There are two files, so malloc memory for two.                        */
-    fp = malloc(sizeof(*fp) * 2);
 
     /*  Create the files and give them write permissions.                     */
     fp[0] = fopen("complex_bessel_I0_real_part.ppm", "w");
@@ -199,7 +196,5 @@ int main(void)
         }
     }
 
-    /*  Free the memory allocated to fp.                                      */
-    free(fp);
     return 0;
 }
