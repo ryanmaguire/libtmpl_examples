@@ -33,21 +33,22 @@ int main(void)
     const long double x1 = 4.0L;
     const long double y1 = 5.0L;
     const long double z1 = 6.0L;
+    long double xs, ys, zs;
 
     /*  Create two vectors from the given real values above.                  */
     tmpl_ThreeVectorLongDouble V0 = tmpl_3DLDouble_Rect(x0, y0, z0);
     const tmpl_ThreeVectorLongDouble V1 = tmpl_3DLDouble_Rect(x1, y1, z1);
 
-    /*  Compute the vector sum of V0 and V1.                                  */
-    tmpl_3DLDouble_AddTo(&V0, &V1);
+    /*  Compute the vector product of V0 and V1.                              */
+    tmpl_3DLDouble_CrossWith(&V0, &V1);
 
-    /*  Extract the components from the sum.                                  */
-    const long double xs = tmpl_3DLDouble_X(&V0);
-    const long double ys = tmpl_3DLDouble_Y(&V0);
-    const long double zs = tmpl_3DLDouble_Z(&V0);
+    /*  Extract the components from the cross product.                        */
+    xs = tmpl_3DLDouble_X(&V0);
+    ys = tmpl_3DLDouble_Y(&V0);
+    zs = tmpl_3DLDouble_Z(&V0);
 
     /*  Print the result.                                                     */
-    printf("   (%Lf, %Lf, %Lf) +\n   (%Lf, %Lf, %Lf)\n = (%Lf, %Lf, %Lf)\n",
+    printf("   (%Lf, %Lf, %Lf) x\n   (%Lf, %Lf, %Lf)\n = (%Lf, %Lf, %Lf)\n",
            x0, y0, z0, x1, y1, z1, xs, ys, zs);
     return 0;
 }

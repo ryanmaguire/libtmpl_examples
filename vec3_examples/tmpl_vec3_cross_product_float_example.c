@@ -47,7 +47,7 @@ int main(void)
     const float zs = tmpl_3DFloat_Z(&cross);
 
     /*  Print the result.                                                     */
-    printf("   (%f, %f, %f) +\n   (%f, %f, %f)\n = (%f, %f, %f)\n",
+    printf("   (%f, %f, %f) x\n   (%f, %f, %f)\n = (%f, %f, %f)\n",
            (double)x0, (double)y0, (double)z0,
            (double)x1, (double)y1, (double)z1,
            (double)xs, (double)ys, (double)zs);

@@ -17,40 +17,29 @@
  *  with libtmpl_examples. If not, see <https://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/*  3D data types and functions found here.                                   */
+/*  The Euclidean norm is declared here.                                      */
 #include <libtmpl/include/tmpl_vec3.h>
 
-/*  printf found here.                                                        */
+/*  We'll use stdio to print the results.                                     */
 #include <stdio.h>
 
-/*  Function for showing basic use of tmpl_3DFloat_CrossWith.                 */
+/*  Routine for computing the norm of the vector (1, 2, 3).                   */
 int main(void)
 {
-    /*  Declare all necessary variables.                                      */
-    const float x0 = 1.0F;
-    const float y0 = 2.0F;
-    const float z0 = 3.0F;
-    const float x1 = 4.0F;
-    const float y1 = 5.0F;
-    const float z1 = 6.0F;
+    /*  Set the x, y, and z values to 1, 2, and 3, respectively.              */
+    const float x = 1.0F;
+    const float y = 2.0F;
+    const float z = 3.0F;
 
-    /*  Create two vectors from the given real values above.                  */
-    tmpl_ThreeVectorFloat V0 = tmpl_3DFloat_Rect(x0, y0, z0);
-    const tmpl_ThreeVectorFloat V1 = tmpl_3DFloat_Rect(x1, y1, z1);
+    /*  Set p to the vector (x, y, z).                                        */
+    const tmpl_ThreeVectorFloat p = tmpl_3DFloat_Rect(x, y, z);
 
-    /*  Compute the vector product of V0 and V1.                              */
-    tmpl_3DFloat_CrossWith(&V0, &V1);
+    /*  Compute the norm of p.                                                */
+    const float norm = tmpl_3DFloat_L2_Norm(&p);
 
-    /*  Extract the components from the cross product.                        */
-    const float xs = tmpl_3DFloat_X(&V0);
-    const float ys = tmpl_3DFloat_Y(&V0);
-    const float zs = tmpl_3DFloat_Z(&V0);
-
-    /*  Print the result.                                                     */
-    printf("   (%f, %f, %f) x\n   (%f, %f, %f)\n = (%f, %f, %f)\n",
-           (double)x0, (double)y0, (double)z0,
-           (double)x1, (double)y1, (double)z1,
-           (double)xs, (double)ys, (double)zs);
+    /*  Print the result:                                                     */
+    printf("||(%f, %f, %f)|| = %f\n",
+           (double)x, (double)y, (double)z, (double)norm);
     return 0;
 }
 /*  End of main.                                                              */

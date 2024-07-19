@@ -17,38 +17,25 @@
  *  with libtmpl_examples. If not, see <https://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/*  3D data types and functions found here.                                   */
+/*	3D vector functions found here.                                           */
 #include <libtmpl/include/tmpl_vec3.h>
 
-/*  printf found here.                                                        */
+/*  We'll use stdio to print the results.                                     */
 #include <stdio.h>
 
-/*  Function for showing basic use of tmpl_3DDouble_Cross_Product.            */
+/*	Function for computing orthogonal vectors.                                */
 int main(void)
 {
-    /*  Declare all necessary variables.                                      */
-    const double x0 = 1.0;
-    const double y0 = 2.0;
-    const double z0 = 3.0;
-    const double x1 = 4.0;
-    const double y1 = 5.0;
-    const double z1 = 6.0;
+	/*	Create a vector in R^3.                                               */
+	const tmpl_ThreeVectorFloat P = tmpl_3DFloat_Rect(1, -1, 1);
 
-    /*  Create two vectors from the given real values above.                  */
-    const tmpl_ThreeVector V0 = tmpl_3DDouble_Rect(x0, y0, z0);
-    const tmpl_ThreeVector V1 = tmpl_3DDouble_Rect(x1, y1, z1);
+	/*	Compute a vector orthogonal to the initial one.                       */
+	const tmpl_ThreeVectorFloat Q = tmpl_3DFloat_Orthogonal(&P);
 
-    /*  Compute the cross product of V0 and V1.                               */
-    const tmpl_ThreeVector cross = tmpl_3DDouble_Cross_Product(&V0, &V1);
-
-    /*  Extract the components from the cross product.                        */
-    const double xs = tmpl_3DDouble_X(&cross);
-    const double ys = tmpl_3DDouble_Y(&cross);
-    const double zs = tmpl_3DDouble_Z(&cross);
-
-    /*  Print the result.                                                     */
-    printf("   (%f, %f, %f) x\n   (%f, %f, %f)\n = (%f, %f, %f)\n",
-           x0, y0, z0, x1, y1, z1, xs, ys, zs);
-    return 0;
+	/*	Print the results.                                                    */
+	printf("<%f, %f, %f>\n",
+	       (double)P.dat[0], (double)P.dat[1], (double)P.dat[2]);
+	printf("<%f, %f, %f>\n",
+	       (double)Q.dat[0], (double)Q.dat[1], (double)Q.dat[2]);
+	return 0;
 }
-/*  End of main.                                                              */
