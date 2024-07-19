@@ -18,8 +18,9 @@
  ******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include <gsl/gsl_sf.h>
+#include <math.h>
 #include <libtmpl/include/tmpl_interpolate.h>
+#include <libtmpl/include/tmpl_math.h>
 
 static void write_val(FILE *fp, double x, double y)
 {
@@ -27,68 +28,71 @@ static void write_val(FILE *fp, double x, double y)
     fwrite(&y, sizeof(y), 1, fp);
 }
 
-static double frand(void)
-{
-    int n_rand = rand();
-    return (double)n_rand / RAND_MAX;
-}
 
 int main(void)
 {
-    FILE *linear_fp, *interp_fp;
+    FILE *linear_fp, *interp_fp, *diff_fp;
 
-    const unsigned long N = 9;
-    const unsigned long N_new = 20;
+    const unsigned long N = 10000U;
+    const unsigned long N_new = 100000U;
     unsigned long n;
 
-    const double start = -0.5*(N - 1);
-    const double end =  0.5*(N - 1);
-    const double dx =  (end - start) / N_new;
+    const double start = -3.0;
+    const double end = +3.0;
+    double dx =  (end - start) / N;
 
-    double *x = malloc(sizeof(x) * N);
-    double *y = malloc(sizeof(y) * N);
+    double *x = malloc(sizeof(x) * (N + 1));
+    double *y = malloc(sizeof(y) * (N + 1));
     double *x_new = malloc(sizeof(x_new) * N_new);
     double *y_new = malloc(sizeof(y_new) * N_new);
 
-    for (n = 0U; n < N; ++n)
+    x[0] = start;
+    y[0] = tmpl_Double_Sin(x[0]);
+
+    for (n = 1; n <= N; ++n)
     {
-        x[n] = start + (double)n;
-        y[n] = frand();
+        x[n] = x[n-1] + dx;
+        y[n] = tmpl_Double_Sin(x[n]);
     }
 
+    dx = (end - start) / N_new;
     x_new[0] = start;
+
     for (n = 1U; n < N_new; ++n)
-        x_new[n] = x_new[n - 1U] + dx;
+        x_new[n] = x_new[n-1] + dx;
 
-    tmpl_Double_Sorted_Interp1d(x, y, N, x_new, y_new, N_new);
-
-    linear_fp = fopen("linear_binary", "w");
-    interp_fp = fopen("interp_binary", "w");
-
-    for (n = 0U; n < N; ++n)
-        write_val(linear_fp, x[n], y[n]);
-
-    for (n = 0U; n < N_new; ++n)
-        write_val(interp_fp, x_new[n], y_new[n]);
-
-    fclose(interp_fp);
-    fclose(linear_fp);
-
-    system("graph -T ps -I d < linear_binary > data.ps");
-    system("graph -T ps -I d < interp_binary > interp.ps");
-    system("rm -f linear_binary interp_binary");
-
-    for (n = 0; n < N; ++n)
-        printf("%e %e\n", x[n], y[n]);
-
-    puts("");
-
-    for (n = 0; n < N_new; ++n)
-        printf("%e %e\n", x_new[n], y_new[n]);
+    tmpl_Double_Sorted_Interp1d(x, y, N+1, x_new, y_new, N_new);
 
     free(x);
     free(y);
+
+    y = malloc(sizeof(y) * N_new);
+
+    for (n=0; n<N_new; ++n)
+        y[n] = tmpl_Double_Sin(x_new[n]);
+
+    linear_fp = fopen("linear_binary", "w");
+    interp_fp = fopen("interp_binary", "w");
+    diff_fp   = fopen("diff_binary", "w");
+
+    for (n=0; n<N_new; ++n)
+    {
+        write_val(linear_fp, x_new[n], y[n]);
+        write_val(interp_fp, x_new[n], y_new[n]);
+        write_val(diff_fp, x_new[n], y_new[n] - y[n]);
+    }
+
+    fclose(interp_fp);
+    fclose(linear_fp);
+    fclose(diff_fp);
+
+    system("graph -T ps -I d < linear_binary interp_binary "
+           "--reposition 0.0 -0.8 1 diff_binary > sin_interp.ps");
+    system("rm -f linear_binary interp_binary diff_binary");
+
+    free(y);
     free(x_new);
     free(y_new);
+
     return 0;
 }
