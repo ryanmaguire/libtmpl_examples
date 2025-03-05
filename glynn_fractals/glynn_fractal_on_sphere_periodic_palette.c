@@ -51,7 +51,7 @@ glynn_func(tmpl_ComplexDouble z, tmpl_ComplexDouble e,
  *  that this variable will be normalize so u and lambda*u will result in the *
  *  same drawing for all positive lambda. u and -u will produce drawings of   *
  *  the opposite side of the sphere.                                          */
-static const tmpl_ThreeVectorDouble camera_pos = {{0.0, -1.0, 0.0}};
+static const tmpl_ThreeVectorDouble camera_pos = {{0.0, 0.0, -1.0}};
 
 /*  The number of pixels in the x and y axes. If you want a higher resolution *
  *  for the output fractal, increase this number. It is best to make n*1024   *
